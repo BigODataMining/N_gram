@@ -4,9 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class n_gram {
-
-	public static HashMap<String, Integer> ngrams(int n, String str) {
-		HashMap<String, Integer> ngrams = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> ngrams(
+			HashMap<String, Integer> ngrams, int n, String str) {
 		String[] words = str.split(" ");
 		for (int i = 0; i < words.length - n + 1; i++) {
 			String ngram = concat(words, i, i + n);
@@ -26,21 +25,20 @@ public class n_gram {
 	}
 
 	public static void main(String[] argv) throws IOException {
-		HashMap map;
-		FileInputStream fr = new FileInputStream(
-				"D:\\Akai Wang\\Seg_TestingData.txt");
+		FileInputStream fr = new FileInputStream("data.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(fr,
 				"UTF-8"));
 		StringBuffer sb = new StringBuffer();
-		String strNum = br.readLine();
+		String strNum = null;
+		HashMap<String, Integer> ngrams = new HashMap<String, Integer>();
+
 		while ((strNum = br.readLine()) != null) {
-			sb.append(strNum);
-			String str = br.readLine();
-			map = n_gram.ngrams(2, str);
+			// sb.append(strNum);
+			// String str=br.readLine();
+			ngrams = n_gram.ngrams(ngrams, 2, strNum);
 		}
 		FileOutputStream fileStream = new FileOutputStream(new File(
-				"D:\\Akai Wang\\2_gram"));
+				"data_output.txt"));
 		OutputStreamWriter writer = new OutputStreamWriter(fileStream, "UTF-8");
-
 	}
 }
