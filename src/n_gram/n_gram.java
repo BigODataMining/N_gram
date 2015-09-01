@@ -80,6 +80,7 @@ public class n_gram {
 				bufferedWriter.write(line);
 				bufferedWriter.newLine();
 			}
+			bufferedWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
