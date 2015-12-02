@@ -16,11 +16,11 @@ public class n_gram {
 		String[] words = str.split(" ");
 		for (int i = 0; i < words.length - n + 1; i++) {
 			String ngram = concat(words, i, i + n);
-			if (ngram.contains("	")) {
-				ngrams.remove(ngram);
-				continue;
+			// if (ngram.contains("	")) {
+			// ngrams.remove(ngram);
+			// continue;
 
-			}
+			// }
 			if (!ngrams.containsKey(ngram)) {
 				ngrams.put(ngram, 0);
 			}
@@ -39,12 +39,12 @@ public class n_gram {
 	 * @return
 	 */
 	public static HashMap<String, Long> index(HashMap<String, Long> index,
-			int n_gram, String str) {
+			int n, String str) {
 		// 檢查有沒有 tab
 		str = str.substring(str.indexOf("\t") + 1);
 		String[] words = str.split(" ");
-		for (int i = 0; i < words.length - n_gram + 1; i++) {
-			String ngram = concat(words, i, i + n_gram);
+		for (int i = 0; i < words.length - n + 1; i++) {
+			String ngram = concat(words, i, i + n);
 			// if (ngram.contains("	")) {
 			// index.remove(ngram);
 			// continue;
@@ -64,29 +64,37 @@ public class n_gram {
 	}
 
 	public static void main(String[] argv) throws IOException {
-		FileInputStream fr = new FileInputStream("Seg_TestingData.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(fr,
-				"UTF-8"));
+		FileInputStream Ngram_fr = new FileInputStream("Seg_TestingData.txt");
+		BufferedReader Ngram_br = new BufferedReader(new InputStreamReader(
+				Ngram_fr, "UTF-8"));
 		FileInputStream Index_fr = new FileInputStream("Seg_TestingData.txt");
 		BufferedReader Index_br = new BufferedReader(new InputStreamReader(
 				Index_fr, "UTF-8"));
-		String strNum = null;
+		FileInputStream SVM_fr = new FileInputStream("Seg_TestingData.txt");
+		BufferedReader SVM_br = new BufferedReader(new InputStreamReader(
+				SVM_fr, "UTF-8"));
+		String strNum_Ngram = null;
 		String strNum_index = null;
+		String strNum_SVM = null;
 		String Ngram_line = null;
 		String Index_line = null;
+		String SVM_line = null;
 		Path Ngram_file = null;
 		Path Index_file = null;
+		Path SVM_file = null;
 		BufferedWriter bufferedWriter = null;
 		HashMap<String, Integer> ngrams = new HashMap<String, Integer>();
 		HashMap<String, Long> index = new HashMap<String, Long>();
 
-		while ((strNum = br.readLine()) != null) {
-			// ngrams = n_gram.ngrams(ngrams, 1, strNum);
-			ngrams = n_gram.ngrams(ngrams, 2, strNum);
+		while ((strNum_Ngram = Ngram_br.readLine()) != null) {
+			// ngrams = n_gram.ngrams(ngrams, 1, strNum_Ngram);
+			ngrams = n_gram.ngrams(ngrams, 2, strNum_Ngram);
+			// ngrams = n_gram.ngrams(ngrams, 3, strNum_Ngram);
 		}
 		while ((strNum_index = Index_br.readLine()) != null) {
 			// index = n_gram.index(index, 1, strNum_index);
 			index = n_gram.index(index, 2, strNum_index);
+			// index = n_gram.index(index, 3, strNum_index);
 		}
 		try {
 			if (Files.exists(Paths.get("Ngram_data_output.txt"))) {
@@ -111,14 +119,144 @@ public class n_gram {
 			Index_file = Files.createFile(Paths.get("Index_data_output.txt"));
 			bufferedWriter = Files.newBufferedWriter(Index_file,
 					Charset.forName("UTF-8"));
-			for (Entry<String, Long> n : index.entrySet()) {
-				Index_line = (n.getKey() + ":" + n.getValue());
+			for (Entry<String, Long> m : index.entrySet()) {
+				Index_line = (m.getKey() + " " + m.getValue());
 				bufferedWriter.write(Index_line);
 				bufferedWriter.newLine();
 			}
 			bufferedWriter.close();
-		} catch (IOException x) {
-			x.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (Files.exists(Paths.get("SVM_data_output.txt"))) {
+				Files.delete(Paths.get("SVM_data_output.txt"));
+			}
+			SVM_file = Files.createFile(Paths.get("SVM_data_output.txt"));
+			bufferedWriter = Files.newBufferedWriter(SVM_file,
+					Charset.forName("UTF-8"));
+			while ((strNum_SVM = SVM_br.readLine()) != null) {
+				if (strNum_SVM.indexOf("sports") != -1) {
+					SVM_line = ("1 ");
+					bufferedWriter.write(SVM_line);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words = strNum_SVM.split(" ");
+					for (int i = 0; i < words.length - 1; i++) {
+						String ngram = concat(words, i, i + 2);
+						Long index_term = index.get(ngram);
+						if (index_term != null) {
+							// for (Entry<String, Integer> m :
+							// ngrams.entrySet()) {
+							// if(ngram==m.getKey())
+							// {
+							// for (Entry<String, Long> n : index.entrySet()) {
+							// if(ngram==n.getKey())
+							// {
+							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							bufferedWriter.write(SVM_line);
+							// }
+							// }
+							// }
+							// }
+						} else {
+
+						}
+					}
+					bufferedWriter.newLine();
+				}
+				if (strNum_SVM.indexOf("health") != -1) {
+					SVM_line = ("2 ");
+					bufferedWriter.write(SVM_line);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words = strNum_SVM.split(" ");
+					for (int i = 0; i < words.length - 1; i++) {
+						String ngram = concat(words, i, i + 2);
+						for (Entry<String, Integer> m : ngrams.entrySet()) {
+							if (ngram == m.getKey()) {
+								for (Entry<String, Long> n : index.entrySet()) {
+									if (ngram == n.getKey()) {
+										SVM_line = (n.getValue() + ":"
+												+ m.getValue() + " ");
+										bufferedWriter.write(SVM_line);
+									}
+								}
+							}
+						}
+					}
+					bufferedWriter.newLine();
+				}
+				if (strNum_SVM.indexOf("politics") != -1) {
+					SVM_line = ("3 ");
+					bufferedWriter.write(SVM_line);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words = strNum_SVM.split(" ");
+					for (int i = 0; i < words.length - 1; i++) {
+						String ngram = concat(words, i, i + 2);
+						for (Entry<String, Integer> m : ngrams.entrySet()) {
+							if (ngram == m.getKey()) {
+								for (Entry<String, Long> n : index.entrySet()) {
+									if (ngram == n.getKey()) {
+										SVM_line = (n.getValue() + ":"
+												+ m.getValue() + " ");
+										bufferedWriter.write(SVM_line);
+									}
+								}
+							}
+						}
+					}
+					bufferedWriter.newLine();
+				}
+				if (strNum_SVM.indexOf("travel") != -1) {
+					SVM_line = ("4 ");
+					bufferedWriter.write(SVM_line);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words = strNum_SVM.split(" ");
+					for (int i = 0; i < words.length - 1; i++) {
+						String ngram = concat(words, i, i + 2);
+						for (Entry<String, Integer> m : ngrams.entrySet()) {
+							if (ngram == m.getKey()) {
+								for (Entry<String, Long> n : index.entrySet()) {
+									if (ngram == n.getKey()) {
+										SVM_line = (n.getValue() + ":"
+												+ m.getValue() + " ");
+										bufferedWriter.write(SVM_line);
+									}
+								}
+							}
+						}
+					}
+					bufferedWriter.newLine();
+				}
+				if (strNum_SVM.indexOf("edu") != -1) {
+					SVM_line = ("5 ");
+					bufferedWriter.write(SVM_line);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words = strNum_SVM.split(" ");
+					for (int i = 0; i < words.length - 1; i++) {
+						String ngram = concat(words, i, i + 2);
+						for (Entry<String, Integer> m : ngrams.entrySet()) {
+							if (ngram == m.getKey()) {
+								for (Entry<String, Long> n : index.entrySet()) {
+									if (ngram == n.getKey()) {
+										SVM_line = (n.getValue() + ":"
+												+ m.getValue() + " ");
+										bufferedWriter.write(SVM_line);
+									}
+								}
+							}
+						}
+					}
+					bufferedWriter.newLine();
+				}
+			}
+			bufferedWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		System.out.println("Complete");
 	}
