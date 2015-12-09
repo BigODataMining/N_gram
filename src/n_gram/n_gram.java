@@ -16,11 +16,6 @@ public class n_gram {
 		String[] words = str.split(" ");
 		for (int i = 0; i < words.length - n + 1; i++) {
 			String ngram = concat(words, i, i + n);
-			// if (ngram.contains("	")) {
-			// ngrams.remove(ngram);
-			// continue;
-
-			// }
 			if (!ngrams.containsKey(ngram)) {
 				ngrams.put(ngram, 0);
 			}
@@ -29,7 +24,7 @@ public class n_gram {
 		return ngrams;
 	}
 
-	public static long count;
+	public static long count = 1;
 
 	/**
 	 * 
@@ -45,10 +40,6 @@ public class n_gram {
 		String[] words = str.split(" ");
 		for (int i = 0; i < words.length - n + 1; i++) {
 			String ngram = concat(words, i, i + n);
-			// if (ngram.contains("	")) {
-			// index.remove(ngram);
-			// continue;
-			// }
 			if (!index.containsKey(ngram)) {
 				index.put(ngram, count += 1);
 			}
@@ -64,13 +55,13 @@ public class n_gram {
 	}
 
 	public static void main(String[] argv) throws IOException {
-		FileInputStream Ngram_fr = new FileInputStream("Seg_TestingData.txt");
+		FileInputStream Ngram_fr = new FileInputStream("Seg_TrainingData.txt");
 		BufferedReader Ngram_br = new BufferedReader(new InputStreamReader(
 				Ngram_fr, "UTF-8"));
-		FileInputStream Index_fr = new FileInputStream("Seg_TestingData.txt");
+		FileInputStream Index_fr = new FileInputStream("Seg_TrainingData.txt");
 		BufferedReader Index_br = new BufferedReader(new InputStreamReader(
 				Index_fr, "UTF-8"));
-		FileInputStream SVM_fr = new FileInputStream("Seg_TestingData.txt");
+		FileInputStream SVM_fr = new FileInputStream("Seg_TrainingData.txt");
 		BufferedReader SVM_br = new BufferedReader(new InputStreamReader(
 				SVM_fr, "UTF-8"));
 		String strNum_Ngram = null;
@@ -136,30 +127,23 @@ public class n_gram {
 			bufferedWriter = Files.newBufferedWriter(SVM_file,
 					Charset.forName("UTF-8"));
 			while ((strNum_SVM = SVM_br.readLine()) != null) {
+				String compare ="";
 				if (strNum_SVM.indexOf("sports") != -1) {
 					SVM_line = ("1 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM
-							.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
 						Long index_term = index.get(ngram);
 						if (index_term != null) {
-							// for (Entry<String, Integer> m :
-							// ngrams.entrySet()) {
-							// if(ngram==m.getKey())
-							// {
-							// for (Entry<String, Long> n : index.entrySet()) {
-							// if(ngram==n.getKey())
-							// {
+							if(compare.indexOf(index_term+"")!=-1)
+								continue;
 							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
 							bufferedWriter.write(SVM_line);
-							// }
-							// }
-							// }
-							// }
-						} else {
+							compare=compare+index_term+"";
+						}
+						else {
 
 						}
 					}
@@ -168,21 +152,20 @@ public class n_gram {
 				if (strNum_SVM.indexOf("health") != -1) {
 					SVM_line = ("2 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM
-							.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
-						for (Entry<String, Integer> m : ngrams.entrySet()) {
-							if (ngram == m.getKey()) {
-								for (Entry<String, Long> n : index.entrySet()) {
-									if (ngram == n.getKey()) {
-										SVM_line = (n.getValue() + ":"
-												+ m.getValue() + " ");
-										bufferedWriter.write(SVM_line);
-									}
-								}
-							}
+						Long index_term = index.get(ngram);
+						if (index_term != null) {
+							if(compare.indexOf(index_term+"")!=-1)
+								continue;
+							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							bufferedWriter.write(SVM_line);
+							compare=compare+index_term+"";
+						} 
+						else {
+
 						}
 					}
 					bufferedWriter.newLine();
@@ -190,21 +173,20 @@ public class n_gram {
 				if (strNum_SVM.indexOf("politics") != -1) {
 					SVM_line = ("3 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM
-							.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
-						for (Entry<String, Integer> m : ngrams.entrySet()) {
-							if (ngram == m.getKey()) {
-								for (Entry<String, Long> n : index.entrySet()) {
-									if (ngram == n.getKey()) {
-										SVM_line = (n.getValue() + ":"
-												+ m.getValue() + " ");
-										bufferedWriter.write(SVM_line);
-									}
-								}
-							}
+						Long index_term = index.get(ngram);
+						if (index_term != null) {
+							if(compare.indexOf(index_term+"")!=-1)
+								continue;
+							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							bufferedWriter.write(SVM_line);
+							compare=compare+index_term+"";
+						} 
+						else {
+
 						}
 					}
 					bufferedWriter.newLine();
@@ -212,21 +194,20 @@ public class n_gram {
 				if (strNum_SVM.indexOf("travel") != -1) {
 					SVM_line = ("4 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM
-							.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
-						for (Entry<String, Integer> m : ngrams.entrySet()) {
-							if (ngram == m.getKey()) {
-								for (Entry<String, Long> n : index.entrySet()) {
-									if (ngram == n.getKey()) {
-										SVM_line = (n.getValue() + ":"
-												+ m.getValue() + " ");
-										bufferedWriter.write(SVM_line);
-									}
-								}
-							}
+						Long index_term = index.get(ngram);
+						if (index_term != null) {
+							if(compare.indexOf(index_term+"")!=-1)
+								continue;
+							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							bufferedWriter.write(SVM_line);
+							compare=compare+index_term+"";
+						} 
+						else {
+
 						}
 					}
 					bufferedWriter.newLine();
@@ -234,21 +215,20 @@ public class n_gram {
 				if (strNum_SVM.indexOf("edu") != -1) {
 					SVM_line = ("5 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM
-							.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
-						for (Entry<String, Integer> m : ngrams.entrySet()) {
-							if (ngram == m.getKey()) {
-								for (Entry<String, Long> n : index.entrySet()) {
-									if (ngram == n.getKey()) {
-										SVM_line = (n.getValue() + ":"
-												+ m.getValue() + " ");
-										bufferedWriter.write(SVM_line);
-									}
-								}
-							}
+						Long index_term = index.get(ngram);
+						if (index_term != null) {
+							if(compare.indexOf(index_term+"")!=-1)
+								continue;
+							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							bufferedWriter.write(SVM_line);
+							compare=compare+index_term+"";
+						}
+						else {
+
 						}
 					}
 					bufferedWriter.newLine();
