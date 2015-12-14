@@ -127,114 +127,180 @@ public class n_gram {
 			bufferedWriter = Files.newBufferedWriter(SVM_file,
 					Charset.forName("UTF-8"));
 			while ((strNum_SVM = SVM_br.readLine()) != null) {
-				String compare ="";
-				if (strNum_SVM.indexOf("sports") != -1) {
+				String compare = "";
+				if (strNum_SVM.indexOf("sports") == 0) {
 					SVM_line = ("1 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
 					String[] words = strNum_SVM.split(" ");
+					Map ascSortedMap = new TreeMap();
 					for (int i = 0; i < words.length - 1; i++) {
 						String ngram = concat(words, i, i + 2);
 						Long index_term = index.get(ngram);
 						if (index_term != null) {
-							if(compare.indexOf(index_term+"")!=-1)
+							if (compare.indexOf(index_term + "") != -1)
 								continue;
-							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
-							bufferedWriter.write(SVM_line);
-							compare=compare+index_term+"";
+							ascSortedMap.put(index_term, ngrams.get(ngram));
+						} else {
+
 						}
-						else {
+					}
+					for (Object entry : ascSortedMap.entrySet()) {
+						if (((Map.Entry) entry).getKey() != null) {
+							if (compare.indexOf(((Map.Entry) entry).getKey()
+									+ "") != -1)
+								continue;
+							SVM_line = ((Map.Entry) entry).getKey() + ":"
+									+ ((Map.Entry) entry).getValue() + " ";
+							bufferedWriter.write(SVM_line);
+							compare = compare + ((Map.Entry) entry).getKey()
+									+ "";
+						} else {
 
 						}
 					}
 					bufferedWriter.newLine();
 				}
-				if (strNum_SVM.indexOf("health") != -1) {
+				if (strNum_SVM.indexOf("health") == 0) {
 					SVM_line = ("2 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
-					String[] words = strNum_SVM.split(" ");
-					for (int i = 0; i < words.length - 1; i++) {
-						String ngram = concat(words, i, i + 2);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words1 = strNum_SVM.split(" ");
+					Map ascSortedMap1 = new TreeMap();
+					for (int i = 0; i < words1.length - 1; i++) {
+						String ngram = concat(words1, i, i + 2);
 						Long index_term = index.get(ngram);
+
 						if (index_term != null) {
-							if(compare.indexOf(index_term+"")!=-1)
+							if (compare.indexOf(index_term + "") != -1)
 								continue;
-							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							ascSortedMap1.put(index_term, ngrams.get(ngram));
+						} else {
+
+						}
+					}
+					for (Object entry : ascSortedMap1.entrySet()) {
+						if (((Map.Entry) entry).getKey() != null) {
+							if (compare.indexOf(((Map.Entry) entry).getKey()
+									+ "") != -1)
+								continue;
+							SVM_line = ((Map.Entry) entry).getKey() + ":"
+									+ ((Map.Entry) entry).getValue() + " ";
 							bufferedWriter.write(SVM_line);
-							compare=compare+index_term+"";
-						} 
-						else {
+							compare = compare + ((Map.Entry) entry).getKey()
+									+ "";
+						} else {
 
 						}
 					}
 					bufferedWriter.newLine();
 				}
-				if (strNum_SVM.indexOf("politics") != -1) {
+				if (strNum_SVM.indexOf("politics") == 0) {
 					SVM_line = ("3 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
-					String[] words = strNum_SVM.split(" ");
-					for (int i = 0; i < words.length - 1; i++) {
-						String ngram = concat(words, i, i + 2);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words2 = strNum_SVM.split(" ");
+					Map ascSortedMap2 = new TreeMap();
+					for (int i = 0; i < words2.length - 1; i++) {
+						String ngram = concat(words2, i, i + 2);
 						Long index_term = index.get(ngram);
 						if (index_term != null) {
-							if(compare.indexOf(index_term+"")!=-1)
+							if (compare.indexOf(index_term + "") != -1)
 								continue;
-							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							ascSortedMap2.put(index_term, ngrams.get(ngram));
+						} else {
+
+						}
+					}
+					for (Object entry : ascSortedMap2.entrySet()) {
+						if (((Map.Entry) entry).getKey() != null) {
+							if (compare.indexOf(((Map.Entry) entry).getKey()
+									+ "") != -1)
+								continue;
+							SVM_line = ((Map.Entry) entry).getKey() + ":"
+									+ ((Map.Entry) entry).getValue() + " ";
 							bufferedWriter.write(SVM_line);
-							compare=compare+index_term+"";
-						} 
-						else {
+							compare = compare + ((Map.Entry) entry).getKey()
+									+ "";
+						} else {
 
 						}
 					}
 					bufferedWriter.newLine();
 				}
-				if (strNum_SVM.indexOf("travel") != -1) {
+				if (strNum_SVM.indexOf("travel") == 0) {
 					SVM_line = ("4 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
-					String[] words = strNum_SVM.split(" ");
-					for (int i = 0; i < words.length - 1; i++) {
-						String ngram = concat(words, i, i + 2);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words3 = strNum_SVM.split(" ");
+					Map ascSortedMap3 = new TreeMap();
+					for (int i = 0; i < words3.length - 1; i++) {
+						String ngram = concat(words3, i, i + 2);
 						Long index_term = index.get(ngram);
 						if (index_term != null) {
-							if(compare.indexOf(index_term+"")!=-1)
+							if (compare.indexOf(index_term + "") != -1)
 								continue;
-							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
+							ascSortedMap3.put(index_term, ngrams.get(ngram));
+						} else {
+
+						}
+					}
+					for (Object entry : ascSortedMap3.entrySet()) {
+						if (((Map.Entry) entry).getKey() != null) {
+							if (compare.indexOf(((Map.Entry) entry).getKey()
+									+ "") != -1)
+								continue;
+							SVM_line = ((Map.Entry) entry).getKey() + ":"
+									+ ((Map.Entry) entry).getValue() + " ";
 							bufferedWriter.write(SVM_line);
-							compare=compare+index_term+"";
-						} 
-						else {
+							compare = compare + ((Map.Entry) entry).getKey()
+									+ "";
+						} else {
 
 						}
 					}
 					bufferedWriter.newLine();
 				}
-				if (strNum_SVM.indexOf("edu") != -1) {
+				if (strNum_SVM.indexOf("edu") == 0) {
 					SVM_line = ("5 ");
 					bufferedWriter.write(SVM_line);
-					strNum_SVM = strNum_SVM.substring(strNum_SVM.indexOf("\t") + 1);
-					String[] words = strNum_SVM.split(" ");
-					for (int i = 0; i < words.length - 1; i++) {
-						String ngram = concat(words, i, i + 2);
+					strNum_SVM = strNum_SVM
+							.substring(strNum_SVM.indexOf("\t") + 1);
+					String[] words4 = strNum_SVM.split(" ");
+					Map ascSortedMap4 = new TreeMap();
+					for (int i = 0; i < words4.length - 1; i++) {
+						String ngram = concat(words4, i, i + 2);
 						Long index_term = index.get(ngram);
 						if (index_term != null) {
-							if(compare.indexOf(index_term+"")!=-1)
+							if (compare.indexOf(index_term + "") != -1)
 								continue;
-							SVM_line = (index_term + ":" + ngrams.get(ngram) + " ");
-							bufferedWriter.write(SVM_line);
-							compare=compare+index_term+"";
+							ascSortedMap4.put(index_term, ngrams.get(ngram));
+						} else {
+
 						}
-						else {
+					}
+					for (Object entry : ascSortedMap4.entrySet()) {
+						if (((Map.Entry) entry).getKey() != null) {
+							if (compare.indexOf(((Map.Entry) entry).getKey()
+									+ "") != -1)
+								continue;
+							SVM_line = ((Map.Entry) entry).getKey() + ":"
+									+ ((Map.Entry) entry).getValue() + " ";
+							bufferedWriter.write(SVM_line);
+							compare = compare + ((Map.Entry) entry).getKey()
+									+ "";
+						} else {
 
 						}
 					}
 					bufferedWriter.newLine();
 				}
 			}
-			bufferedWriter.close();
+		bufferedWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
